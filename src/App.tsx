@@ -5,8 +5,18 @@ import { Separator } from "./components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { Slider } from "./components/ui/slider";
 import { VideoInputForm } from "./components/video-input-form";
+import { PromptSelect } from "./components/prompt-select";
+import { useState } from "react";
 
 export function App() {
+  const [temparature, setTemperature] = useState(0.5)
+  const [videoId, setVideoId] = useState<string | null>(null)
+
+  function handlePromptSelected(template: string) {
+    console.log(template)
+  }
+
+
 
   return (
    <div className="min-h-screen flex flex-col">
@@ -41,22 +51,14 @@ export function App() {
       </div>
 
       <aside className="w-80 space-y-6">
-        <VideoInputForm/>
+        <VideoInputForm onVideoUploaded={setVideoId} />
 
         <Separator/>
 
         <form className="space-y-6">
         <div className="space-y-2">
             <label>Prompt</label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione um prompt..."/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="title">Título do Youtube</SelectItem>
-                <SelectItem value="description">Descrição do Youtube</SelectItem>
-              </SelectContent>
-            </Select>
+            <PromptSelect onPromptSelected={handlePromptSelected} />
           </div>
 
           <div className="space-y-2">
@@ -79,9 +81,11 @@ export function App() {
           <div className="space-y-4">
             <label>Temperatura</label>
             <Slider
-             min={0}
-             max={1}
-             step={0.1}
+              onValueChange={value => setTemperature(value[0])}
+              value={[temparature]}
+              min={0}
+              max={1}
+              step={0.1}
             />
             <span className="block text-xs text-muted-foreground italic leading-relaxed">
               Valores mais alto tendem a deixar o resultado mais criativo e com possíveis erros 
