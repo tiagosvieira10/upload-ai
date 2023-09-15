@@ -18,11 +18,18 @@ export function App() {
   const {
     input,
     setInput,
+    handleInputChange,
+    handleSubmit,
+    completion,
+    isLoading,
   } = useCompletion({
     api: 'http://localhost:3333/ai/complete',
     body: {
       videoId,
       temparature,
+    },
+    headers: {
+      'Content-type': 'application/json',
     },
   })
 
@@ -47,11 +54,13 @@ export function App() {
             className="resize-none p-4 leading-relaxed" 
             placeholder="Inclua o prompt para a IA..."
             value={input}
+            onChange={handleInputChange}
           />
           <Textarea
             className="resize-none p-4 leading-relaxed" 
             placeholder="Resultado gerado pela IA..."
             readOnly
+            value={completion}
           />
         </div>
 
@@ -65,8 +74,8 @@ export function App() {
 
         <Separator/>
 
-        <form className="space-y-6">
-        <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
             <label>Prompt</label>
             <PromptSelect onPromptSelected={setInput} />
           </div>
@@ -104,7 +113,7 @@ export function App() {
 
           <Separator/>
 
-          <Button type="submit" className="w-full">
+          <Button disabled={isLoading} type="submit" className="w-full">
             Executar
             <Wand2 className="w-4 h-4 ml-2"/>
           </Button>
